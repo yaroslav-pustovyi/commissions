@@ -19,6 +19,6 @@ class ExchangeRatesApiClient implements RateClientInterface
     {
         $response = $this->httpClient->request('GET', sprintf('%s?access_key=%s', $this->uri, $this->accessKey));
 
-        return json_decode($response->getBody()->getContents(), true)['rates'];
+        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)['rates'];
     }
 }
