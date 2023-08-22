@@ -24,7 +24,7 @@ class CommissionsHandler implements CommissionsHandlerInterface
 
         $amntFixed = $transaction->paidAmount;
         if ($rate > 0) {
-            $amntFixed = $transaction->paidAmount->divide((string)($rate));
+            $amntFixed = $amntFixed->divide((string)($rate));
         }
 
         return $amntFixed->multiply((string)$this->getMultiplier($binInfo));

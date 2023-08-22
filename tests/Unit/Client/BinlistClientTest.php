@@ -2,37 +2,36 @@
 
 declare(strict_types=1);
 
-namespace Test\Client;
+namespace Test\Unit\Client;
 
-use App\Client\ExchangeRatesApiClient;
+use App\Client\BinlistClient;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
-class ExchangeRatesApiClientTest extends TestCase
+class BinlistClientTest extends TestCase
 {
     private const URI = 'test.test';
-    private const ACCESS_KEY = 'test_access_key';
 
     private Client&MockObject $httpClient;
-    private ExchangeRatesApiClient $ratesApiClient;
+    private BinlistClient $binlistClient;
 
     public function setUp(): void
     {
         $this->httpClient = $this->createMock(Client::class);
-        $this->ratesApiClient = new ExchangeRatesApiClient(
-            $this->httpClient,
-            self::URI,
-            self::ACCESS_KEY
-        );
+        $this->binlistClient = new BinlistClient($this->httpClient, self::URI);
     }
 
-    public function testGetRates(): void
+    public function testGetBinInfo(): void
     {
+        $bin = '1234567';
+
         $responseData = [
-            'rates' => ['USD' => 5]
+            'country' => [
+                'alpha2' => 'DKK',
+            ]
         ];
 
         $responseBody = $this->createMock(StreamInterface::class);
@@ -43,11 +42,12 @@ class ExchangeRatesApiClientTest extends TestCase
 
         $this->httpClient->expects(self::once())
             ->method('request')
-            ->with('GET', sprintf('%s?access_key=%s', self::URI, self::ACCESS_KEY))
+            ->with('GET', sprintf('%s/%s', self::URI, $bin))
             ->willReturn($response);
 
-        $rates = $this->ratesApiClient->getRates();
 
-        $this->assertSame($responseData['rates'], $rates);
+        $binInfo = $this->binlistClient->getBinInfo($bin);
+
+        $this->assertEquals('DKK', $binInfo->getCountry()->getAlpha2());
     }
 }
