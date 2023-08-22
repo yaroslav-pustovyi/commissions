@@ -24,6 +24,6 @@
     "scripts": {
         "run:csfixer": "vendor/bin/php-cs-fixer fix . -v",
         "run:stan": "php -d memory_limit=384M ./vendor/phpstan/phpstan/phpstan analyse --level 8 .",
-        "run:tests": "./vendor/bin/phpunit tests --colors alway"
+        "run:tests": "./vendor/bin/phpunit tests --colors always"
     }
 }
