@@ -6,6 +6,7 @@
         }
     },
     "require": {
+        "php": "^8.1",
         "moneyphp/money": "^4.2",
         "guzzlehttp/guzzle": "^7.7",
         "vlucas/phpdotenv": "^5.5"
